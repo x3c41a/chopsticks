@@ -35,11 +35,14 @@ export const processOptions = async (options: SetupOptions) => {
 
   let provider: ProviderInterface
   if (options.genesis) {
+    defaultLogger.debug(options, 'Setup options - genesis')
     provider = options.genesis
   } else if (typeof options.endpoint === 'string' && /^(https|http):\/\//.test(options.endpoint || '')) {
+    defaultLogger.debug(options, 'Setup options - HTTP')
     provider = new HttpProvider(options.endpoint)
   } else {
-    provider = new WsProvider(options.endpoint, 3_000)
+    defaultLogger.debug(options, 'Setup options - WS')
+    provider = new WsProvider(options.endpoint, 3_000, undefined, 300_000)
   }
   const api = new Api(provider)
 
